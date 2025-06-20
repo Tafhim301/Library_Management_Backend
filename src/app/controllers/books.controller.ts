@@ -10,17 +10,24 @@ const createBookZodSchema = z.object({
   isbn: z.string(),
   description: z.string().optional(),
   copies: z.number(),
-  available: z.boolean(),
+  available: z.boolean().optional(),
 });
 
 booksRoutes.get("/", async (req: Request, res: Response) => {
   try {
-    const book = await Books.find();
+    const{ filter,sort = 'desc',sortBy = "createdAt",limit = "10"} = req.query;
+    const query : any = {};
+    if(filter){
+      query.genre = filter
+    }
+    const books = await Books.find(query)
+    .sort({[sortBy as string] : sort === 'asc' ? 1 : -1 })
+    .limit(parseInt(limit as string));
 
     res.status(200).json({
       success: true,
       message: "Books retrieved successfully",
-      book,
+      books,
     });
   } catch (error: any) {
     res.status(404).json({
