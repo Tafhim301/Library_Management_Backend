@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { Books } from "../models/books.model";
 import z from "zod";
-export const booksRoutes = express();
+export const booksRoutes = express.Router();
 
 const createBookZodSchema = z.object({
   title: z.string(),

@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
-import { IBooks } from "../interfaces/books.interface";
+import { IBooks, UserStaticMethods } from "../interfaces/books.interface";
 
-const bookSchema = new Schema<IBooks>(
+const bookSchema = new Schema<IBooks, UserStaticMethods>(
   {
     title: {
       type: String,
@@ -33,7 +33,7 @@ const bookSchema = new Schema<IBooks>(
     },
     copies: {
       type: Number,
-       min: [0, "Copies must be a positive number"],
+      min: [0, "Copies must be a positive number"],
       required: true,
     },
 
@@ -48,4 +48,16 @@ const bookSchema = new Schema<IBooks>(
   }
 );
 
-export const Books = model("Books", bookSchema);
+bookSchema.static("updateAvailability", async function (bookId: string) {
+  const book = await this.findById(bookId);
+  if (!book) {
+    return false;
+  }
+
+  if (book.copies === 0) {
+    book.available = false;
+    await book.save();
+  }
+});
+
+export const Books = model<IBooks, UserStaticMethods>("Books", bookSchema);

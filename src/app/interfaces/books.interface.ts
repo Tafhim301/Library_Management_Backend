@@ -1,3 +1,5 @@
+import { Model, Types } from "mongoose";
+
 export interface IBooks {
   title: string;
   author: string;
@@ -12,4 +14,8 @@ export interface IBooks {
   description: string;
   copies: number;
   available: boolean;
+}
+
+export interface UserStaticMethods extends Model<IBooks> {
+    updateAvailability(bookId : string) : void
 }
