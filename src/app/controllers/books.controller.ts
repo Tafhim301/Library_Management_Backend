@@ -15,19 +15,24 @@ const createBookZodSchema = z.object({
 
 booksRoutes.get("/", async (req: Request, res: Response) => {
   try {
-    const{ filter,sort = 'desc',sortBy = "createdAt",limit = "10"} = req.query;
-    const query : any = {};
-    if(filter){
-      query.genre = filter
+    const {
+      filter,
+      sort = "desc",
+      sortBy = "createdAt",
+      limit = "10",
+    } = req.query;
+    const query: any = {};
+    if (filter) {
+      query.genre = filter;
     }
     const books = await Books.find(query)
-    .sort({[sortBy as string] : sort === 'asc' ? 1 : -1 })
-    .limit(parseInt(limit as string));
+      .sort({ [sortBy as string]: sort === "asc" ? 1 : -1 })
+      .limit(parseInt(limit as string));
 
     res.status(200).json({
       success: true,
       message: "Books retrieved successfully",
-      books,
+      data: books,
     });
   } catch (error: any) {
     res.status(404).json({
@@ -47,7 +52,7 @@ booksRoutes.get("/:bookId", async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: "Book retrieved successfully",
-      book,
+      data: book,
     });
   } catch (error: any) {
     res.status(404).json({
@@ -85,7 +90,7 @@ booksRoutes.patch("/:bookId", async (req: Request, res: Response) => {
     res.status(201).json({
       success: true,
       message: "Book updated successfully",
-      book,
+      data: book,
     });
   } catch (error: any) {
     res.status(404).json({
@@ -103,7 +108,7 @@ booksRoutes.delete("/:bookId", async (req: Request, res: Response) => {
     res.status(201).json({
       success: true,
       message: "Book deleted successfully",
-      data : null,
+      data: null,
     });
   } catch (error: any) {
     res.status(404).json({
