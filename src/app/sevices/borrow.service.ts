@@ -1,7 +1,8 @@
+import { Types } from "mongoose";
 import { Books } from "../models/books.model";
 import { Borrows } from "../models/borrow.model";
 
-export const borrowBook = async (bookId: string, quantity: number) => {
+export const borrowBook = async (bookId: Types.ObjectId, quantity: number) => {
   const book = await Books.findById(bookId);
   if (!book) {
     throw new Error("Book not found");

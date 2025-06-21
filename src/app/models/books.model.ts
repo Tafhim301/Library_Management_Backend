@@ -51,12 +51,16 @@ const bookSchema = new Schema<IBooks, UserStaticMethods>(
 bookSchema.static("updateAvailability", async function (bookId: string) {
   const book = await this.findById(bookId);
   if (!book) {
-    return false;
+    return;
   }
 
   if (book.copies === 0) {
     book.available = false;
     await book.save();
+  } else if (book.copies > 0) {
+    book.available = true;
+    await book.save();
+
   }
 });
 

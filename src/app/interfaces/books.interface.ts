@@ -17,5 +17,5 @@ export interface IBooks {
 }
 
 export interface UserStaticMethods extends Model<IBooks> {
-    updateAvailability(bookId : string) : void
+    updateAvailability(bookId :Types.ObjectId) : void
 }

@@ -68,10 +68,10 @@ booksRoutes.post("/", async (req: Request, res: Response) => {
     const body = await createBookZodSchema.parseAsync(req.body);
     const book = await Books.create(body);
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Book created successfully",
-      book,
+      data: book,
     });
   } catch (error: any) {
     res.status(404).json({
@@ -81,16 +81,20 @@ booksRoutes.post("/", async (req: Request, res: Response) => {
     });
   }
 });
-booksRoutes.patch("/:bookId", async (req: Request, res: Response) => {
+booksRoutes.put("/:bookId", async (req: Request, res: Response) => {
   try {
     const bookId = req.params.bookId;
     const body = req.body;
     const book = await Books.findByIdAndUpdate(bookId, body, { new: true });
+    if (book) {
+      await Books.updateAvailability(book._id);
+    }
+    const updatedbook = await Books.findById(bookId);
 
     res.status(201).json({
       success: true,
       message: "Book updated successfully",
-      data: book,
+      data: updatedbook,
     });
   } catch (error: any) {
     res.status(404).json({
