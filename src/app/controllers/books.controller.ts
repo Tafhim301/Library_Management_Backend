@@ -13,6 +13,16 @@ const createBookZodSchema = z.object({
   available: z.boolean().optional(),
 });
 
+export const updateBookZodSchema = z.object({
+  title: z.string().optional(),
+  author: z.string().optional(),
+  genre: z.string().optional(),
+  isbn: z.string().optional(),
+  description: z.string().optional(),
+  copies: z.number().min(0, "Copies cannot be negative").optional(),
+  available: z.boolean().optional(),
+});
+
 booksRoutes.get("/", async (req: Request, res: Response) => {
   try {
     const {
@@ -93,7 +103,11 @@ booksRoutes.put("/:bookId", async (req: Request, res: Response) => {
   try {
     const bookId = req.params.bookId;
     const body = req.body;
-    const book = await Books.findByIdAndUpdate(bookId, body, { new: true , runValidators : true});
+    const validatedBody = await updateBookZodSchema.parseAsync(body);
+    const book = await Books.findByIdAndUpdate(bookId,validatedBody, {
+      new: true,
+      runValidators: true,
+    });
     if (book) {
       await Books.updateAvailability(book._id);
     }
