@@ -46,8 +46,10 @@ booksRoutes.get("/", async (req: Request, res: Response) => {
 booksRoutes.get("/:bookId", async (req: Request, res: Response) => {
   try {
     const bookId = req.params.bookId;
-
     const book = await Books.findById(bookId);
+    if(!book){
+      throw new Error("Book not found")
+    }
 
     res.status(200).json({
       success: true,
@@ -109,7 +111,7 @@ booksRoutes.delete("/:bookId", async (req: Request, res: Response) => {
     const bookId = req.params.bookId;
     await Books.findByIdAndDelete(bookId);
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Book deleted successfully",
       data: null,
