@@ -1,36 +1,25 @@
-# 📚 Library Management API
+# 📖 Library Management API
 
-An Express.js + TypeScript + MongoDB based backend project for managing books and borrow records. Developed as part of **Apollo Level 2 Web Development Course (Assignment 3)**.
-
-## 🌟 Features
-
-- ✅ Add, update, delete, and retrieve books
-- ✅ Borrow books with quantity and due date validation
-- ✅ Auto-update book availability when borrowed copies run out
-- ✅ Validation with Zod and Mongoose
-- ✅ Aggregation pipeline for borrow summaries
-- ✅ Middleware, static methods, instance methods included
-- ✅ Error handling and input filtering
-- ✅ Fully RESTful API design
+An Express, TypeScript, and MongoDB-powered Library Management System API.
 
 ---
 
-## 🧰 Tech Stack
+## 🎯 Objective
 
-- Node.js
-- Express.js
-- TypeScript
-- MongoDB + Mongoose
-- Zod (for request validation)
-- Vercel (deployment)
+Build a RESTful backend for managing books and borrowings, featuring:
+
+- Schema validation
+- Business logic enforcement (book availability)
+- Aggregation pipelines
+- Mongoose static and middleware methods
+- Filtering, sorting, and pagination
+- Global error handling
 
 ---
 
-## 🚀 API Endpoints
+## 📚 Book Endpoints
 
-### 📗 Books
-
-#### ➕ Create Book
+### 📗 Create Book  
 **POST** `/api/books`
 
 Request body:
@@ -44,7 +33,7 @@ Request body:
   "copies": 5,
   "available": true
 }
-📚 Get All Books
+📘 Get All Books
 GET /api/books
 
 Supports filters:
@@ -58,8 +47,11 @@ sort: asc or desc
 limit: number of results
 
 Example:
-/api/books?filter=FANTASY&sortBy=createdAt&sort=desc&limit=5
 
+bash
+Copy
+Edit
+/api/books?filter=FANTASY&sortBy=createdAt&sort=desc&limit=5
 🔍 Get Book by ID
 GET /api/books/:bookId
 
@@ -69,23 +61,25 @@ PUT /api/books/:bookId
 Request body:
 
 json
-Copy code
+Copy
+Edit
 {
   "copies": 50
 }
 ❌ Delete Book
 DELETE /api/books/:bookId
 
-Note: Book cannot be deleted if there are associated borrow records.
+⚠️ Book cannot be deleted if there are associated borrow records.
 
-📕 Borrow
+📕 Borrow Endpoints
 📥 Borrow a Book
 POST /api/borrow
 
 Request body:
 
 json
-Copy code
+Copy
+Edit
 {
   "book": "<bookId>",
   "quantity": 2,
@@ -104,10 +98,11 @@ Saves borrow entry
 📊 Borrowed Books Summary
 GET /api/borrow
 
-Returns:
+Response:
 
 json
-Copy code
+Copy
+Edit
 [
   {
     "book": {
@@ -118,29 +113,31 @@ Copy code
   }
 ]
 ✅ Validations
-Book Schema
-title, author, genre, isbn, copies are required
+📗 Book Schema
+title, author, genre, isbn, copies — required
 
-isbn must be unique
+isbn — must be unique
 
-genre must be one of: FICTION, NON_FICTION, SCIENCE, HISTORY, BIOGRAPHY, FANTASY
+genre — must be one of:
+FICTION, NON_FICTION, SCIENCE, HISTORY, BIOGRAPHY, FANTASY
 
-copies must be a non-negative integer
+copies — must be a non-negative integer
 
-available defaults to true
+available — defaults to true
 
-Borrow Schema
-book (ObjectId) required
+📘 Borrow Schema
+book — required (ObjectId)
 
-quantity must be a positive integer
+quantity — positive integer
 
-dueDate must be a valid date
+dueDate — valid date
 
 🧪 Error Handling
 Generic error response format:
 
 json
-Copy code
+Copy
+Edit
 {
   "success": false,
   "message": "Validation failed",
@@ -153,35 +150,43 @@ Copy code
     }
   }
 }
-🔄 Project Setup
-Clone the repo
+Handles:
 
+Validation errors
+
+Not found errors
+
+Mongo duplicate key errors (e.g., ISBN)
+
+🔄 Project Setup
+🧬 Clone the repo
 bash
-Copy code
+Copy
+Edit
 git clone https://github.com/Tafhim301/Library_Management_Backend
 cd Library-Management-API
-Install dependencies
-
+📦 Install dependencies
 bash
-Copy code
+Copy
+Edit
 npm install
-Set up environment variables
-
+🛠️ Set up environment variables
 Create a .env file:
 
 ini
-Copy code
+Copy
+Edit
 DB_URI=mongodb+srv://...
 PORT=5000
-Build and run
-
+🔧 Build & Run
 bash
-Copy code
+Copy
+Edit
 npm run build && npm start
-Dev mode
-
+💻 Dev mode
 bash
-Copy code
+Copy
+Edit
 npm run dev
 🌐 Live API
 Base URL:
@@ -191,24 +196,25 @@ Try endpoints like:
 GET /api/books
 
 🎥 Video Explanation
-📺 Watch explanation on YouTube (Replace with your actual video link)
+📺 Watch explanation on YouTube: (Add your public video link here)
 
-📌 Submission Checklist
- All required API endpoints implemented
+✅ Submission Checklist
+✅ All API endpoints implemented
 
- Validations and error handling done
+✅ Validation and error handling done
 
- Aggregation used in borrow summary
+✅ Aggregation used for borrow summary
 
- Middleware and static method used
+✅ Mongoose middleware and static method used
 
- README written
+✅ Proper README.md written
 
- Deployed to Vercel
+✅ Deployed on Vercel
 
- ✅ Final code pushed to GitHub
+✅ Code pushed to GitHub
 
 👨‍💻 Author
 Tafhimul Islam
-GitHub: @tafhim301
+GitHub: @Tafhim301
+
 
