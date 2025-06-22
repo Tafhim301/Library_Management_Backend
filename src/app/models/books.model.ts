@@ -54,13 +54,16 @@ bookSchema.static("updateAvailability", async function (bookId: string) {
     return;
   }
 
-  if (book.copies <= 0) {
+  if (book.copies === 0) {
     book.available = false;
     await book.save();
   } else if (book.copies > 0) {
     book.available = true;
     await book.save();
 
+  }
+  else{
+    throw new Error("Invalid Input");
   }
 });
 
