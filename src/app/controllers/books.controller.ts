@@ -13,7 +13,6 @@ const createBookZodSchema = z.object({
   available: z.boolean().optional(),
 });
 
-
 booksRoutes.get("/", async (req: Request, res: Response) => {
   try {
     const {
@@ -94,8 +93,8 @@ booksRoutes.put("/:bookId", async (req: Request, res: Response) => {
   try {
     const bookId = req.params.bookId;
     const body = req.body;
-  
-    const book = await Books.findByIdAndUpdate(bookId,body, {
+
+    const book = await Books.findByIdAndUpdate(bookId, body, {
       runValidators: true,
       new: true,
     });

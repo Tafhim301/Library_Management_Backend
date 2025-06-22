@@ -25,8 +25,8 @@ const bookSchema = new Schema<IBooks, UserStaticMethods>(
     },
     isbn: {
       type: String,
-      unique: true,
       required: true,
+      unique: [true, "isbn must be unique"],
     },
     description: {
       type: String,
@@ -66,5 +66,17 @@ bookSchema.static("updateAvailability", async function (bookId: string) {
     throw new Error("Invalid Input");
   }
 });
+
+bookSchema.pre("save", async function (next) {
+  const existing = await Books.findOne({ isbn: this.isbn });
+  if (existing && existing._id.toString() !== this._id.toString()) {
+    throw new Error("ISBN must be unique");
+   
+   
+    
+  }
+  next();
+});
+
 
 export const Books = model<IBooks, UserStaticMethods>("Books", bookSchema);

@@ -34,8 +34,8 @@ const bookSchema = new mongoose_1.Schema({
     },
     isbn: {
         type: String,
-        unique: true,
         required: true,
+        unique: [true, "isbn must be unique"],
     },
     description: {
         type: String,
@@ -70,6 +70,15 @@ bookSchema.static("updateAvailability", function (bookId) {
         else {
             throw new Error("Invalid Input");
         }
+    });
+});
+bookSchema.pre("save", function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const existing = yield exports.Books.findOne({ isbn: this.isbn });
+        if (existing && existing._id.toString() !== this._id.toString()) {
+            throw new Error("ISBN must be unique");
+        }
+        next();
     });
 });
 exports.Books = (0, mongoose_1.model)("Books", bookSchema);
