@@ -54,6 +54,14 @@ exports.booksRoutes.get("/:bookId", (req, res) => __awaiter(void 0, void 0, void
     try {
         const bookId = req.params.bookId;
         const book = yield books_model_1.Books.findById(bookId);
+        if (book === null) {
+            res.status(404).json({
+                success: false,
+                message: "Book not found",
+                data: null,
+            });
+            return;
+        }
         res.status(200).json({
             success: true,
             message: "Book retrieved successfully",
@@ -61,7 +69,7 @@ exports.booksRoutes.get("/:bookId", (req, res) => __awaiter(void 0, void 0, void
         });
     }
     catch (error) {
-        res.status(404).json({
+        res.status(500).json({
             success: false,
             message: error.message,
             error,
@@ -90,12 +98,15 @@ exports.booksRoutes.put("/:bookId", (req, res) => __awaiter(void 0, void 0, void
     try {
         const bookId = req.params.bookId;
         const body = req.body;
-        const book = yield books_model_1.Books.findByIdAndUpdate(bookId, body, { new: true });
+        const book = yield books_model_1.Books.findByIdAndUpdate(bookId, body, {
+            runValidators: true,
+            new: true,
+        });
         if (book) {
             yield books_model_1.Books.updateAvailability(book._id);
         }
         const updatedbook = yield books_model_1.Books.findById(bookId);
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             message: "Book updated successfully",
             data: updatedbook,
@@ -113,7 +124,7 @@ exports.booksRoutes.delete("/:bookId", (req, res) => __awaiter(void 0, void 0, v
     try {
         const bookId = req.params.bookId;
         yield books_model_1.Books.findByIdAndDelete(bookId);
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             message: "Book deleted successfully",
             data: null,

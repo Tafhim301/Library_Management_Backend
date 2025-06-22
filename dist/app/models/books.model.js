@@ -67,6 +67,9 @@ bookSchema.static("updateAvailability", function (bookId) {
             book.available = true;
             yield book.save();
         }
+        else {
+            throw new Error("Invalid Input");
+        }
     });
 });
 exports.Books = (0, mongoose_1.model)("Books", bookSchema);

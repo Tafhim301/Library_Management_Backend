@@ -104,7 +104,7 @@ booksRoutes.put("/:bookId", async (req: Request, res: Response) => {
     }
     const updatedbook = await Books.findById(bookId);
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Book updated successfully",
       data: updatedbook,
