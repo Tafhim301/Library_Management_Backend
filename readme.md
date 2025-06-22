@@ -1,7 +1,6 @@
 # 📚 Library Management API
 
-An Express.js + TypeScript + MongoDB based backend project for managing books and borrow records. Developed as part of **Apollo Level 2 Web Development Course (Assignment 3)**.
-
+An Express.js + TypeScript + MongoDB based backend project for managing books and borrow records. 
 ---
 
 ## 🌟 Features
@@ -87,7 +86,7 @@ An Express.js + TypeScript + MongoDB based backend project for managing books an
 #### ❌ Delete Book
 **DELETE** `/api/books/:bookId`
 
-> **Note:** Book cannot be deleted if there are associated borrow records.
+
 
 ---
 
