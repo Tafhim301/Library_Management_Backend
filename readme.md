@@ -1,28 +1,41 @@
-# 📖 Library Management API
+# 📚 Library Management API
 
-An Express, TypeScript, and MongoDB-powered Library Management System API.
-
----
-
-## 🎯 Objective
-
-Build a RESTful backend for managing books and borrowings, featuring:
-
-- Schema validation
-- Business logic enforcement (book availability)
-- Aggregation pipelines
-- Mongoose static and middleware methods
-- Filtering, sorting, and pagination
-- Global error handling
+An Express.js + TypeScript + MongoDB based backend project for managing books and borrow records. Developed as part of **Apollo Level 2 Web Development Course (Assignment 3)**.
 
 ---
 
-## 📚 Book Endpoints
+## 🌟 Features
 
-### 📗 Create Book  
+- ✅ Add, update, delete, and retrieve books
+- ✅ Borrow books with quantity and due date validation
+- ✅ Auto-update book availability when borrowed copies run out
+- ✅ Validation with Zod and Mongoose
+- ✅ Aggregation pipeline for borrow summaries
+- ✅ Middleware, static methods, instance methods included
+- ✅ Error handling and input filtering
+- ✅ Fully RESTful API design
+
+---
+
+## 🧰 Tech Stack
+
+- Node.js
+- Express.js
+- TypeScript
+- MongoDB + Mongoose
+- Zod (for request validation)
+- Vercel (deployment)
+
+---
+
+## 🚀 API Endpoints
+
+### 📗 Books
+
+#### ➕ Create Book
 **POST** `/api/books`
 
-Request body:
+**Request body:**
 ```json
 {
   "title": "The Theory of Everything",
@@ -33,76 +46,79 @@ Request body:
   "copies": 5,
   "available": true
 }
-📘 Get All Books
-GET /api/books
+```
 
-Supports filters:
+---
 
-filter: genre
+#### 📚 Get All Books
+**GET** `/api/books`
 
-sortBy: field (e.g., createdAt)
+**Supports filters:**
 
-sort: asc or desc
+- `filter`: genre
+- `sortBy`: field (e.g., createdAt)
+- `sort`: asc or desc
+- `limit`: number of results
 
-limit: number of results
-
-Example:
-
-bash
-Copy
-Edit
+**Example:**
+```bash
 /api/books?filter=FANTASY&sortBy=createdAt&sort=desc&limit=5
-🔍 Get Book by ID
-GET /api/books/:bookId
+```
 
-✏️ Update Book
-PUT /api/books/:bookId
+---
 
-Request body:
+#### 🔍 Get Book by ID
+**GET** `/api/books/:bookId`
 
-json
-Copy
-Edit
+---
+
+#### ✏️ Update Book
+**PUT** `/api/books/:bookId`
+
+**Request body:**
+```json
 {
   "copies": 50
 }
-❌ Delete Book
-DELETE /api/books/:bookId
+```
 
-⚠️ Book cannot be deleted if there are associated borrow records.
+---
 
-📕 Borrow Endpoints
-📥 Borrow a Book
-POST /api/borrow
+#### ❌ Delete Book
+**DELETE** `/api/books/:bookId`
 
-Request body:
+> **Note:** Book cannot be deleted if there are associated borrow records.
 
-json
-Copy
-Edit
+---
+
+### 📕 Borrow
+
+#### 📥 Borrow a Book
+**POST** `/api/borrow`
+
+**Request body:**
+```json
 {
   "book": "<bookId>",
   "quantity": 2,
   "dueDate": "2025-07-18T00:00:00.000Z"
 }
-Business Logic:
+```
 
-Checks available copies
+**Business Logic:**
 
-Deducts quantity
+- Checks available copies
+- Deducts quantity
+- If copies reach 0, marks the book as unavailable
+- Saves borrow entry
 
-If copies reach 0, marks the book as unavailable
+---
 
-Saves borrow entry
+#### 📊 Borrowed Books Summary
+**GET** `/api/borrow`
 
-📊 Borrowed Books Summary
-GET /api/borrow
-
-Response:
-
-json
-Copy
-Edit
+**Returns:**
+```json
 [
   {
     "book": {
@@ -112,32 +128,30 @@ Edit
     "totalQuantity": 5
   }
 ]
-✅ Validations
-📗 Book Schema
-title, author, genre, isbn, copies — required
+```
 
-isbn — must be unique
+---
 
-genre — must be one of:
-FICTION, NON_FICTION, SCIENCE, HISTORY, BIOGRAPHY, FANTASY
+## ✅ Validations
 
-copies — must be a non-negative integer
+### Book Schema
+- `title`, `author`, `genre`, `isbn`, `copies` are required
+- `isbn` must be unique
+- `genre` must be one of: `FICTION`, `NON_FICTION`, `SCIENCE`, `HISTORY`, `BIOGRAPHY`, `FANTASY`
+- `copies` must be a non-negative integer
+- `available` defaults to `true`
 
-available — defaults to true
+### Borrow Schema
+- `book` (ObjectId) required
+- `quantity` must be a positive integer
+- `dueDate` must be a valid date
 
-📘 Borrow Schema
-book — required (ObjectId)
+---
 
-quantity — positive integer
+## 🧪 Error Handling
 
-dueDate — valid date
-
-🧪 Error Handling
-Generic error response format:
-
-json
-Copy
-Edit
+**Generic error response format:**
+```json
 {
   "success": false,
   "message": "Validation failed",
@@ -150,71 +164,72 @@ Edit
     }
   }
 }
-Handles:
+```
 
-Validation errors
+---
 
-Not found errors
+## 🔄 Project Setup
 
-Mongo duplicate key errors (e.g., ISBN)
-
-🔄 Project Setup
-🧬 Clone the repo
-bash
-Copy
-Edit
+**Clone the repo**
+```bash
 git clone https://github.com/Tafhim301/Library_Management_Backend
 cd Library-Management-API
-📦 Install dependencies
-bash
-Copy
-Edit
-npm install
-🛠️ Set up environment variables
-Create a .env file:
+```
 
-ini
-Copy
-Edit
+**Install dependencies**
+```bash
+npm install
+```
+
+**Set up environment variables**
+
+Create a `.env` file:
+```ini
 DB_URI=mongodb+srv://...
 PORT=5000
-🔧 Build & Run
-bash
-Copy
-Edit
+```
+
+**Build and run**
+```bash
 npm run build && npm start
-💻 Dev mode
-bash
-Copy
-Edit
+```
+
+**Dev mode**
+```bash
 npm run dev
-🌐 Live API
-Base URL:
-https://library-management-backend-rosy.vercel.app
+```
 
-Try endpoints like:
-GET /api/books
+---
 
-🎥 Video Explanation
-📺 Watch explanation on YouTube: (Add your public video link here)
+## 🌐 Live API
 
-✅ Submission Checklist
-✅ All API endpoints implemented
+Base URL:  
+**https://library-management-backend-rosy.vercel.app**
 
-✅ Validation and error handling done
+Try endpoints like:  
+`GET /api/books`
 
-✅ Aggregation used for borrow summary
+---
 
-✅ Mongoose middleware and static method used
+## 🎥 Video Explanation
 
-✅ Proper README.md written
+📺 [Watch explanation on YouTube](#) *(Replace with your actual video link)*
 
-✅ Deployed on Vercel
+---
 
-✅ Code pushed to GitHub
+## 📌 Submission Checklist
 
-👨‍💻 Author
-Tafhimul Islam
-GitHub: @Tafhim301
+- ✅ All required API endpoints implemented  
+- ✅ Validations and error handling done  
+- ✅ Aggregation used in borrow summary  
+- ✅ Middleware and static method used  
+- ✅ README written  
+- ✅ Deployed to Vercel  
+- ✅ Final code pushed to GitHub  
 
+---
 
+## 👨‍💻 Author
+
+**Tafhimul Islam**  
+GitHub: [@tafhim301](https://github.com/tafhim301)
