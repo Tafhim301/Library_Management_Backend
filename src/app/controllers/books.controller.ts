@@ -96,8 +96,8 @@ booksRoutes.put("/:bookId", async (req: Request, res: Response) => {
     const body = req.body;
   
     const book = await Books.findByIdAndUpdate(bookId,body, {
-      new: true,
       runValidators: true,
+      new: true,
     });
     if (book) {
       await Books.updateAvailability(book._id);
