@@ -9,9 +9,14 @@ const borrows_controller_1 = require("./app/controllers/borrows.controller");
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use((0, cors_1.default)({ origin: 'http://localhost:5173' }));
-app.use('/api/books', books_controller_1.booksRoutes);
-app.use('/api/borrow', borrows_controller_1.borrowsRoutes);
+app.use((0, cors_1.default)({
+    origin: [
+        "http://localhost:5173",
+        "https://library-management-frontend-alpha.vercel.app",
+    ],
+}));
+app.use("/api/books", books_controller_1.booksRoutes);
+app.use("/api/borrow", borrows_controller_1.borrowsRoutes);
 app.get("/", (req, res) => {
     res.send("Welcome to library management server");
 });

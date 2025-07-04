@@ -16,22 +16,40 @@ const createBookZodSchema = z.object({
 booksRoutes.get("/", async (req: Request, res: Response) => {
   try {
     const {
-      filter,
+      filter='All',
       sort = "desc",
       sortBy = "createdAt",
       limit = "10",
+      page = "1",
     } = req.query;
+
     const query: any = {};
-    if (filter) {
+    if (filter && filter !== "All" ) {
       query.genre = filter;
+      
     }
+
+    const pageNumber = parseInt(page as string);
+    const limitNumber = parseInt(limit as string);
+    const skip = (pageNumber - 1) * limitNumber;
+
+    const total = await Books.countDocuments(query);
+
     const books = await Books.find(query)
       .sort({ [sortBy as string]: sort === "asc" ? 1 : -1 })
-      .limit(parseInt(limit as string));
+      .skip(skip)
+      .limit(limitNumber);
 
     res.status(200).json({
       success: true,
       message: "Books retrieved successfully",
+      meta: {
+        filter,
+        total,
+        limit: limitNumber,
+        page: pageNumber,
+        totalPages: Math.ceil(total / limitNumber),
+      },
       data: books,
     });
   } catch (error: any) {
@@ -42,6 +60,7 @@ booksRoutes.get("/", async (req: Request, res: Response) => {
     });
   }
 });
+
 
 booksRoutes.get("/:bookId", async (req: Request, res: Response) => {
   try {

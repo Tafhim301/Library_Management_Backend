@@ -28,17 +28,29 @@ const createBookZodSchema = zod_1.default.object({
 });
 exports.booksRoutes.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { filter, sort = "desc", sortBy = "createdAt", limit = "10", } = req.query;
+        const { filter = 'All', sort = "desc", sortBy = "createdAt", limit = "10", page = "1", } = req.query;
         const query = {};
-        if (filter) {
+        if (filter && filter !== "All") {
             query.genre = filter;
         }
+        const pageNumber = parseInt(page);
+        const limitNumber = parseInt(limit);
+        const skip = (pageNumber - 1) * limitNumber;
+        const total = yield books_model_1.Books.countDocuments(query);
         const books = yield books_model_1.Books.find(query)
             .sort({ [sortBy]: sort === "asc" ? 1 : -1 })
-            .limit(parseInt(limit));
+            .skip(skip)
+            .limit(limitNumber);
         res.status(200).json({
             success: true,
             message: "Books retrieved successfully",
+            meta: {
+                filter,
+                total,
+                limit: limitNumber,
+                page: pageNumber,
+                totalPages: Math.ceil(total / limitNumber),
+            },
             data: books,
         });
     }
