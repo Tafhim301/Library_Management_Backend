@@ -6,9 +6,9 @@ An Express.js + TypeScript + MongoDB based backend project for managing books an
 ## 🌟 Features
 
 - ✅ Add, update, delete, and retrieve books
-- ✅ Borrow books with quantity and due date validation
-- ✅ Auto-update book availability when borrowed copies run out
 - ✅ Validation with Zod and Mongoose
+- ✅ Auto-update book availability when borrowed copies run out
+- ✅ Borrow books with quantity and due date validation
 - ✅ Aggregation pipeline for borrow summaries
 - ✅ Middleware, static methods, instance methods included
 - ✅ Error handling and input filtering

@@ -35,7 +35,7 @@ const bookSchema = new mongoose_1.Schema({
     isbn: {
         type: String,
         required: true,
-        unique: [true, "isbn must be unique"],
+        unique: [true, "ISBN must be unique"],
     },
     description: {
         type: String,
@@ -74,9 +74,15 @@ bookSchema.static("updateAvailability", function (bookId) {
 });
 bookSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const existing = yield exports.Books.findOne({ isbn: this.isbn });
-        if (existing && existing._id.toString() !== this._id.toString()) {
-            throw new Error("ISBN must be unique");
+        if (this.isNew || this.isModified("isbn")) {
+            const query = { isbn: this.isbn };
+            if (!this.isNew) {
+                query._id = { $ne: this._id };
+            }
+            const existingBook = yield this.constructor.findOne(query);
+            if (existingBook) {
+                return next(new Error("ISBN must be unique"));
+            }
         }
         next();
     });
